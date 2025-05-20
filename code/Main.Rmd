@@ -78,7 +78,7 @@ For some reason the columns "jaarafgerond", "jaaringepland", "maandafgerond" and
 <br>
 
 ```{r}
-# reading the old data (fill in the correct paths to the data and nonce)
+# reading the source data (fill in the correct paths to the source data and nonce)
 cipher <- readBin("path_to_data.csv", what = "raw", n = file.info("path_to_data.csv")$size)
 nonce <- readBin("path_to_nonce.bin", what = "raw", n = 24)
 
