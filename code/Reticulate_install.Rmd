@@ -1,0 +1,90 @@
+---
+title: "Installing Reticulate"
+output: html_document
+date: "2025-02-22"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+reticulate::conda_create("./python-env-test/")
+```
+
+```{r}
+if (!dir.exists("./python-env-test/")) {
+  reticulate::conda_create("./python-env-test/")
+}
+```
+
+```{r}
+# search for a Python installation in your working directory
+py_bin <- grep(getwd(), reticulate::conda_list()$python, value = TRUE)
+Sys.setenv(RETICULATE_PYTHON = py_bin)
+```
+
+```{r}
+writeLines(
+  paste0("RETICULATE_PYTHON = ", paste0(getwd(), "/python-env-test/bin/python")), 
+  paste0(here::here(), ".Rprofile")
+)
+```
+
+```{r}
+reticulate::conda_install(
+    packages = c("scikit-learn", "pandas"),
+    envname = "./python-env-test/"
+)
+```
+
+The following can be used as a test if everything is installed correctly 
+```{python}
+text = 1 + 1
+print(text)
+```
+
+```{python}
+import numpy as np
+import pandas as pd
+```
+
+```{python}
+np.arange(1, 10)
+```
+
+```{python}
+# Make a sequence in a data frame using dict format
+df = pd.DataFrame(data = {"sequence":np.arange(1,20,.01)})
+
+# Use assign (mutate) equivalent to calculate the np.sin() of the series
+df = df.assign(value=np.sin(df["sequence"]))
+
+df
+```
+
+```{python}
+import matplotlib as plt
+
+df.plot(x="sequence", y = "value", title = "Matplotlib")
+```
+
+
+```{python}
+from sklearn.ensemble import RandomForestClassifier
+
+clf = RandomForestClassifier(random_state=0)
+
+X = [[ 1,  2,  3],  # 2 samples, 3 features
+     [11, 12, 13]]
+
+y = [0, 1]  # classes of each sample
+
+clf.fit(X, y)
+```
+
+```{python}
+clf.predict(X)  # predict classes of the training data
+```
+
